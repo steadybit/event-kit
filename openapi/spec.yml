@@ -1,0 +1,349 @@
+openapi: 3.1.0
+info:
+  title: Steadybit EventKit API
+  version: 1.0.0
+  license:
+    name: MIT
+    identifier: MIT
+consumes:
+  - application/json
+produces:
+  - application/json
+components:
+  schemas:
+    EventListenerList:
+      title: Event Listener List
+      description: Lists all listeners that the platform/agent could call.
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DescribingEndpointReference'
+          uniqueItems: true
+      required:
+        - events
+    EventKitError:
+      title: Error
+      description: >-
+        An enhanced version of RFC 7807 Problem Details for HTTP APIs compliant response body for error scenarios
+      properties:
+        status:
+          description: >-
+            * failed - The event listener has detected some failures, for example a failing test which has been implemented by the event listener. The event listener will be stopped, if this status is returned by the status endpoint.
+            * errored - There was a technical error while executing the event listener. Will be marked as red in the platform. The event listener will be stopped, if this status is returned by the status endpoint.
+          enum:
+            - failed
+            - errored
+          type: string
+          default: errored
+        type:
+          type: string
+          description: A URI reference that identifies the problem type.
+        title:
+          type: string
+          description: 'A short, human-readable summary of the problem type.'
+        detail:
+          type: string
+          description: >-
+            A human-readable explanation specific to this occurrence of the
+            problem.
+        instance:
+          type: string
+          description: >-
+            A URI reference that identifies the specific occurrence of the
+            problem.
+      required:
+        - title
+    EventListenerDescription:
+      title: Event Listener Description
+      description: >-
+        Provides details about a possible event listener, e.g., what configuration
+        options it has,how to trigger the listener.
+      type: object
+      properties:
+        id:
+          type: string
+          description: >-
+            A technical ID that is used to uniquely identify this type of
+            the event listener. You will typically want to use something like
+            `org.example.my-fancy-listener`.
+        label:
+          type: string
+          description: A human-readable label for the event listener.
+        icon:
+          type: string
+          description: >-
+            An icon that is used to identify your event listener in the ui. Needs to be
+            a data-uri containing an image.
+          maxLength: 1000000
+          pattern: '^data:.*$'
+        version:
+          type: string
+          description: >-
+            The version of the event listener. Remember to increase the value everytime
+            you update the definitions. The platform will ignore any definition
+            changes with the same event listener version. We do recommend usage of
+            semver strings.
+        description:
+          type: string
+          description: >-
+            Description for end-users to help them understand what the event listener is
+            doing.
+        listenTo:
+          type: array
+          description: >-
+            List of events that the event listener want to listen to.
+          items:
+            type: string
+        includeEnvironmentVariables:
+          type: array
+          description: >-
+            List of environmentVariables that should be included in the event
+          items:
+            type: string
+        listen:
+          $ref: '#/components/schemas/MutatingEndpointReference'
+      required:
+        - id
+        - label
+        - version
+        - description
+        - listen
+    ListenResult:
+      type: object
+    DescribingEndpointReference:
+      title: HTTP Endpoint Reference
+      description: HTTP endpoint which the Steadybit platform/agent could communicate with.
+      properties:
+        path:
+          description: Absolute path of the HTTP endpoint.
+          type: string
+          pattern: ^/.*$
+        method:
+          description: HTTP method to use when calling the HTTP endpoint.
+          type: string
+          enum:
+            - get
+      required:
+        - path
+        - method
+    MutatingHttpMethod:
+      type: string
+      enum:
+        - post
+        - put
+        - delete
+    MutatingEndpointReference:
+      title: HTTP Endpoint Reference
+      description: HTTP endpoint which the Steadybit platform/agent could communicate with.
+      properties:
+        path:
+          type: string
+          description: Absolute path of the HTTP endpoint.
+          pattern: ^/.*$
+        method:
+          description: HTTP method to use when calling the HTTP endpoint.
+          $ref: '#/components/schemas/MutatingHttpMethod'
+      required:
+        - path
+        - method
+    Principal:
+      title: User Principal
+      description: >-
+        The user principal is used to identify the user that is currently
+        interacting with the platform.
+      properties:
+        username:
+          type: string
+          description: >-
+            The username of the user. This is the unique identifier for the user.
+            The username is used to identify the user in the platform.
+        name:
+          type: string
+          description: >-
+            The name of the user. This name is used to identify the user
+            in the platform.
+        email:
+          type: string
+          description: >-
+            The email address of the user. This email address is used to
+            identify the user in the platform.
+    Tenant:
+      title: Tenant
+      description: >-
+        The tenant is used to identify the tenant that the user is currently
+        interacting with.
+      properties:
+        key:
+          type: string
+          description: >-
+            The key of the tenant. This is the unique identifier for the tenant.
+            The key is used to identify the tenant in the platform.
+        name:
+          type: string
+          description: >-
+            The name of the tenant. This name is used to identify the tenant
+            in the platform.
+    Team:
+      title: Team
+      description: >-
+        The team is used to identify the team that the user is currently
+        interacting with.
+      properties:
+        id:
+          type: string
+          description: >-
+            The id of the team. This is the unique identifier for the team.
+            The id is used to identify the team in the platform.
+        key:
+          type: string
+          description: >-
+            The key of the team. This is the unique identifier for the team.
+            The key is used to identify the team in the platform.
+        name:
+          type: string
+          description: >-
+            The name of the team. This name is used to identify the team
+            in the platform.
+    Environment:
+      title: Environment
+      description: >-
+        The environment is used to identify the environment that the user is currently
+        interacting with.
+      properties:
+        id:
+          type: string
+          description: >-
+            The id of the environment. This is the unique identifier for the environment.
+            The id is used to identify the environment in the platform.
+        name:
+          type: string
+          description: >-
+            The name of the environment. This name is used to identify the environment
+            in the platform.
+    ExperimentExecution:
+      title: Experiment Execution
+      description: >-
+        The experiment execution is used to identify the experiment execution
+      properties:
+        experimentKey:
+          type: string
+          description: >-
+            The key of the experiment
+        executionId:
+          type: string
+          description: >-
+            The id of the experiment execution
+        name:
+          type: string
+          description: >-
+            The name of the experiment execution. This name is used to identify the experiment execution
+            in the platform.
+        hypothesis:
+          type: string
+          description: >-
+            The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution
+            in the platform.
+        preparedTime:
+          type: string
+          format: date-time
+          description: >-
+            The time when the experiment execution was prepared
+        startedTime:
+          type: string
+          format: date-time
+          description: >-
+            The time when the experiment execution was started
+        endedTime:
+          type: string
+          format: date-time
+          description: >-
+            The time when the experiment execution was ended
+        state:
+          type: string
+          description: >-
+            The state of the experiment execution
+          enum:
+            - CREATED
+            - PREPARED
+            - RUNNING
+            - FAILED
+            - COMPLETED
+            - CANCELED
+            - SKIPPED
+            - ERRORED
+        failureReason:
+          type: string
+          description: >-
+            The failure reason of the experiment execution
+        failureReasonDetails:
+          type: string
+          description: >-
+            The failure reason details of the experiment execution
+        variables:
+          type: object
+          description: >-
+            The variables of the experiment execution
+          additionalProperties:
+            type: string
+        triggeredVia:
+          type: string
+          description: >-
+            The trigger of the experiment execution
+          enum:
+            - API
+            - USER
+            - SCHEDULE
+  requestBodies:
+    EventListenerRequestBody:
+      title: Consume Event Request Body
+      description: The HTTP request payload passed to the event listener listener endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: string
+                x-go-type: uuid.UUID
+                x-go-type-import:
+                  path: github.com/google/uuid
+              eventName:
+                type: string
+              eventTime:
+                type: string
+                format: date-time
+              principal:
+                $ref: '#/components/schemas/Principal'
+              tenant:
+                $ref: '#/components/schemas/Tenant'
+              team:
+                $ref: '#/components/schemas/Team'
+              environment:
+                $ref: '#/components/schemas/Environment'
+              experimentExecution:
+                $ref: '#/components/schemas/ExperimentExecution'
+            required:
+              - executionId
+              - config
+  responses:
+    EventListenerListResponse:
+      title: Event Listener List Response
+      description: Response for the event list endpoint
+      content:
+        application/json:
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/EventListenerList'
+              - $ref: '#/components/schemas/EventKitError'
+    DescribeEventListenerResponse:
+      title: Describe Action Response
+      description: Response for the describe action endpoint
+      content:
+        application/json:
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/EventListenerDescription'
+              - $ref: '#/components/schemas/EventKitError'

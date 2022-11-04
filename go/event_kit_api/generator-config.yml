@@ -1,0 +1,9 @@
+package: event_kit_api
+generate:
+  models: true
+output-options:
+  skip-prune: true
+  exclude-schemas:
+    - ParameterOption
+additional-imports:
+  - package: "github.com/google/uuid"
