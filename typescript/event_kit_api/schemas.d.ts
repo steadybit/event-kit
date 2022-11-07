@@ -12,9 +12,7 @@ export interface components {
 		 * @description Lists all listeners that the platform/agent could call.
 		 */
 		EventListenerList: {
-			actions?: components['schemas']['DescribingEndpointReference'][];
-		} & {
-			events: unknown;
+			eventListeners: components['schemas']['DescribingEndpointReference'][];
 		};
 		/**
 		 * Error
@@ -89,9 +87,9 @@ export interface components {
 		 */
 		Principal: {
 			/** @description The username of the user. This is the unique identifier for the user. The username is used to identify the user in the platform. */
-			username?: string;
+			username: string;
 			/** @description The name of the user. This name is used to identify the user in the platform. */
-			name?: string;
+			name: string;
 			/** @description The email address of the user. This email address is used to identify the user in the platform. */
 			email?: string;
 		};
@@ -101,9 +99,9 @@ export interface components {
 		 */
 		Tenant: {
 			/** @description The key of the tenant. This is the unique identifier for the tenant. The key is used to identify the tenant in the platform. */
-			key?: string;
+			key: string;
 			/** @description The name of the tenant. This name is used to identify the tenant in the platform. */
-			name?: string;
+			name: string;
 		};
 		/**
 		 * Team
@@ -111,11 +109,11 @@ export interface components {
 		 */
 		Team: {
 			/** @description The id of the team. This is the unique identifier for the team. The id is used to identify the team in the platform. */
-			id?: string;
+			id: string;
 			/** @description The key of the team. This is the unique identifier for the team. The key is used to identify the team in the platform. */
-			key?: string;
+			key: string;
 			/** @description The name of the team. This name is used to identify the team in the platform. */
-			name?: string;
+			name: string;
 		};
 		/**
 		 * Environment
@@ -123,9 +121,8 @@ export interface components {
 		 */
 		Environment: {
 			/** @description The id of the environment. This is the unique identifier for the environment. The id is used to identify the environment in the platform. */
-			id?: string;
-			/** @description The name of the environment. This name is used to identify the environment in the platform. */
-			name?: string;
+			id: string;
+			name: string;
 		};
 		/**
 		 * Experiment Execution
@@ -133,44 +130,44 @@ export interface components {
 		 */
 		ExperimentExecution: {
 			/** @description The key of the experiment */
-			experimentKey?: string;
+			experimentKey: string;
 			/** @description The id of the experiment execution */
-			executionId?: string;
+			executionId: string;
 			/** @description The name of the experiment execution. This name is used to identify the experiment execution in the platform. */
-			name?: string;
+			name: string;
 			/** @description The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution in the platform. */
-			hypothesis?: string;
+			hypothesis: string;
 			/**
 			 * Format: date-time
 			 * @description The time when the experiment execution was prepared
 			 */
-			preparedTime?: string;
+			preparedTime: string;
 			/**
 			 * Format: date-time
 			 * @description The time when the experiment execution was started
 			 */
-			startedTime?: string;
+			startedTime: string;
 			/**
 			 * Format: date-time
 			 * @description The time when the experiment execution was ended
 			 */
-			endedTime?: string;
+			endedTime: string;
 			/**
 			 * @description The state of the experiment execution
 			 * @enum {string}
 			 */
-			state?: 'CREATED' | 'PREPARED' | 'RUNNING' | 'FAILED' | 'COMPLETED' | 'CANCELED' | 'SKIPPED' | 'ERRORED';
+			state: 'CREATED' | 'PREPARED' | 'RUNNING' | 'FAILED' | 'COMPLETED' | 'CANCELED' | 'SKIPPED' | 'ERRORED';
 			/** @description The failure reason of the experiment execution */
-			failureReason?: string;
+			failureReason: string;
 			/** @description The failure reason details of the experiment execution */
-			failureReasonDetails?: string;
+			failureReasonDetails: string;
 			/** @description The variables of the experiment execution */
-			variables?: { [key: string]: string };
+			variables: { [key: string]: string };
 			/**
 			 * @description The trigger of the experiment execution
 			 * @enum {string}
 			 */
-			triggeredVia?: 'API' | 'USER' | 'SCHEDULE';
+			triggeredVia: 'API' | 'USER' | 'SCHEDULE';
 		};
 	};
 	responses: {
@@ -195,18 +192,15 @@ export interface components {
 			content: {
 				'application/json': {
 					/** Format: string */
-					id?: string;
-					eventName?: string;
+					id: string;
+					eventName: string;
 					/** Format: date-time */
-					eventTime?: string;
-					principal?: components['schemas']['Principal'];
-					tenant?: components['schemas']['Tenant'];
+					eventTime: string;
+					principal: components['schemas']['Principal'];
+					tenant: components['schemas']['Tenant'];
 					team?: components['schemas']['Team'];
 					environment?: components['schemas']['Environment'];
 					experimentExecution?: components['schemas']['ExperimentExecution'];
-				} & {
-					executionId: unknown;
-					config: unknown;
 				};
 			};
 		};

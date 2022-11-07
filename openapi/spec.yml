@@ -16,13 +16,13 @@ components:
       description: Lists all listeners that the platform/agent could call.
       type: object
       properties:
-        actions:
+        eventListeners:
           type: array
           items:
             $ref: '#/components/schemas/DescribingEndpointReference'
           uniqueItems: true
       required:
-        - events
+        - eventListeners
     EventKitError:
       title: Error
       description: >-
@@ -169,6 +169,9 @@ components:
           description: >-
             The email address of the user. This email address is used to
             identify the user in the platform.
+      required:
+        - username
+        - name
     Tenant:
       title: Tenant
       description: >-
@@ -185,6 +188,9 @@ components:
           description: >-
             The name of the tenant. This name is used to identify the tenant
             in the platform.
+      required:
+        - key
+        - name
     Team:
       title: Team
       description: >-
@@ -206,6 +212,10 @@ components:
           description: >-
             The name of the team. This name is used to identify the team
             in the platform.
+      required:
+        - id
+        - key
+        - name
     Environment:
       title: Environment
       description: >-
@@ -219,9 +229,9 @@ components:
             The id is used to identify the environment in the platform.
         name:
           type: string
-          description: >-
-            The name of the environment. This name is used to identify the environment
-            in the platform.
+      required:
+        - id
+        - name
     ExperimentExecution:
       title: Experiment Execution
       description: >-
@@ -295,6 +305,19 @@ components:
             - API
             - USER
             - SCHEDULE
+      required:
+        - experimentKey
+        - executionId
+        - name
+        - hypothesis
+        - preparedTime
+        - startedTime
+        - endedTime
+        - state
+        - failureReason
+        - failureReasonDetails
+        - variables
+        - triggeredVia
   requestBodies:
     EventListenerRequestBody:
       title: Consume Event Request Body
@@ -326,8 +349,11 @@ components:
               experimentExecution:
                 $ref: '#/components/schemas/ExperimentExecution'
             required:
-              - executionId
-              - config
+              - id
+              - eventName
+              - eventTime
+              - principal
+              - tenant
   responses:
     EventListenerListResponse:
       title: Event Listener List Response

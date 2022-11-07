@@ -62,10 +62,8 @@ type DescribingEndpointReferenceMethod string
 // The environment is used to identify the environment that the user is currently interacting with.
 type Environment struct {
 	// The id of the environment. This is the unique identifier for the environment. The id is used to identify the environment in the platform.
-	Id *string `json:"id,omitempty"`
-
-	// The name of the environment. This name is used to identify the environment in the platform.
-	Name *string `json:"name,omitempty"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // An enhanced version of RFC 7807 Problem Details for HTTP APIs compliant response body for error scenarios
@@ -118,46 +116,46 @@ type EventListenerDescription struct {
 
 // Lists all listeners that the platform/agent could call.
 type EventListenerList struct {
-	Actions *[]DescribingEndpointReference `json:"actions,omitempty"`
+	EventListeners []DescribingEndpointReference `json:"eventListeners"`
 }
 
 // The experiment execution is used to identify the experiment execution
 type ExperimentExecution struct {
 	// The time when the experiment execution was ended
-	EndedTime *time.Time `json:"endedTime,omitempty"`
+	EndedTime time.Time `json:"endedTime"`
 
 	// The id of the experiment execution
-	ExecutionId *string `json:"executionId,omitempty"`
+	ExecutionId string `json:"executionId"`
 
 	// The key of the experiment
-	ExperimentKey *string `json:"experimentKey,omitempty"`
+	ExperimentKey string `json:"experimentKey"`
 
 	// The failure reason of the experiment execution
-	FailureReason *string `json:"failureReason,omitempty"`
+	FailureReason string `json:"failureReason"`
 
 	// The failure reason details of the experiment execution
-	FailureReasonDetails *string `json:"failureReasonDetails,omitempty"`
+	FailureReasonDetails string `json:"failureReasonDetails"`
 
 	// The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution in the platform.
-	Hypothesis *string `json:"hypothesis,omitempty"`
+	Hypothesis string `json:"hypothesis"`
 
 	// The name of the experiment execution. This name is used to identify the experiment execution in the platform.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 
 	// The time when the experiment execution was prepared
-	PreparedTime *time.Time `json:"preparedTime,omitempty"`
+	PreparedTime time.Time `json:"preparedTime"`
 
 	// The time when the experiment execution was started
-	StartedTime *time.Time `json:"startedTime,omitempty"`
+	StartedTime time.Time `json:"startedTime"`
 
 	// The state of the experiment execution
-	State *ExperimentExecutionState `json:"state,omitempty"`
+	State ExperimentExecutionState `json:"state"`
 
 	// The trigger of the experiment execution
-	TriggeredVia *ExperimentExecutionTriggeredVia `json:"triggeredVia,omitempty"`
+	TriggeredVia ExperimentExecutionTriggeredVia `json:"triggeredVia"`
 
 	// The variables of the experiment execution
-	Variables *map[string]string `json:"variables,omitempty"`
+	Variables map[string]string `json:"variables"`
 }
 
 // The state of the experiment execution
@@ -186,31 +184,31 @@ type Principal struct {
 	Email *string `json:"email,omitempty"`
 
 	// The name of the user. This name is used to identify the user in the platform.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 
 	// The username of the user. This is the unique identifier for the user. The username is used to identify the user in the platform.
-	Username *string `json:"username,omitempty"`
+	Username string `json:"username"`
 }
 
 // The team is used to identify the team that the user is currently interacting with.
 type Team struct {
 	// The id of the team. This is the unique identifier for the team. The id is used to identify the team in the platform.
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
 
 	// The key of the team. This is the unique identifier for the team. The key is used to identify the team in the platform.
-	Key *string `json:"key,omitempty"`
+	Key string `json:"key"`
 
 	// The name of the team. This name is used to identify the team in the platform.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 // The tenant is used to identify the tenant that the user is currently interacting with.
 type Tenant struct {
 	// The key of the tenant. This is the unique identifier for the tenant. The key is used to identify the tenant in the platform.
-	Key *string `json:"key,omitempty"`
+	Key string `json:"key"`
 
 	// The name of the tenant. This name is used to identify the tenant in the platform.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 // DescribeEventListenerResponse defines model for DescribeEventListenerResponse.
@@ -227,21 +225,21 @@ type EventListenerListResponse struct {
 type EventListenerRequestBody struct {
 	// The environment is used to identify the environment that the user is currently interacting with.
 	Environment *Environment `json:"environment,omitempty"`
-	EventName   *string      `json:"eventName,omitempty"`
-	EventTime   *time.Time   `json:"eventTime,omitempty"`
+	EventName   string       `json:"eventName"`
+	EventTime   time.Time    `json:"eventTime"`
 
 	// The experiment execution is used to identify the experiment execution
 	ExperimentExecution *ExperimentExecution `json:"experimentExecution,omitempty"`
-	Id                  *uuid.UUID           `json:"id,omitempty"`
+	Id                  uuid.UUID            `json:"id"`
 
 	// The user principal is used to identify the user that is currently interacting with the platform.
-	Principal *Principal `json:"principal,omitempty"`
+	Principal Principal `json:"principal"`
 
 	// The team is used to identify the team that the user is currently interacting with.
 	Team *Team `json:"team,omitempty"`
 
 	// The tenant is used to identify the tenant that the user is currently interacting with.
-	Tenant *Tenant `json:"tenant,omitempty"`
+	Tenant Tenant `json:"tenant"`
 }
 
 func (t DescribeEventListenerResponse) AsEventListenerDescription() (EventListenerDescription, error) {
