@@ -70,7 +70,7 @@ export interface components {
 			method: 'get';
 		};
 		/** @enum {string} */
-		MutatingHttpMethod: 'post' | 'put' | 'delete';
+		MutatingHttpMethod: 'post';
 		/**
 		 * HTTP Endpoint Reference
 		 * @description HTTP endpoint which the Steadybit platform/agent could communicate with.

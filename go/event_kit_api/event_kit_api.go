@@ -42,9 +42,7 @@ const (
 
 // Defines values for MutatingHttpMethod.
 const (
-	Delete MutatingHttpMethod = "delete"
-	Post   MutatingHttpMethod = "post"
-	Put    MutatingHttpMethod = "put"
+	Post MutatingHttpMethod = "post"
 )
 
 // HTTP endpoint which the Steadybit platform/agent could communicate with.

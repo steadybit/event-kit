@@ -132,8 +132,6 @@ components:
       type: string
       enum:
         - post
-        - put
-        - delete
     MutatingEndpointReference:
       title: HTTP Endpoint Reference
       description: HTTP endpoint which the Steadybit platform/agent could communicate with.
