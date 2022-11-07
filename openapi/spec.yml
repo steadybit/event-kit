@@ -19,97 +19,43 @@ components:
         eventListeners:
           type: array
           items:
-            $ref: '#/components/schemas/DescribingEndpointReference'
+            $ref: '#/components/schemas/EventListener'
           uniqueItems: true
       required:
         - eventListeners
-    EventKitError:
-      title: Error
-      description: >-
-        An enhanced version of RFC 7807 Problem Details for HTTP APIs compliant response body for error scenarios
-      properties:
-        status:
-          description: >-
-            * failed - The event listener has detected some failures, for example a failing test which has been implemented by the event listener. The event listener will be stopped, if this status is returned by the status endpoint.
-            * errored - There was a technical error while executing the event listener. Will be marked as red in the platform. The event listener will be stopped, if this status is returned by the status endpoint.
-          enum:
-            - failed
-            - errored
-          type: string
-          default: errored
-        type:
-          type: string
-          description: A URI reference that identifies the problem type.
-        title:
-          type: string
-          description: 'A short, human-readable summary of the problem type.'
-        detail:
-          type: string
-          description: >-
-            A human-readable explanation specific to this occurrence of the
-            problem.
-        instance:
-          type: string
-          description: >-
-            A URI reference that identifies the specific occurrence of the
-            problem.
-      required:
-        - title
-    EventListenerDescription:
+    EventListener:
       title: Event Listener Description
-      description: >-
-        Provides details about a possible event listener, e.g., what configuration
-        options it has,how to trigger the listener.
       type: object
       properties:
-        id:
+        path:
           type: string
-          description: >-
-            A technical ID that is used to uniquely identify this type of
-            the event listener. You will typically want to use something like
-            `org.example.my-fancy-listener`.
-        label:
+          description: Absolute path of the HTTP endpoint.
+          pattern: ^/.*$
+        method:
+          description: HTTP method to use when calling the HTTP endpoint.
+          $ref: '#/components/schemas/MutatingHttpMethod'
+        restrictTo:
           type: string
-          description: A human-readable label for the event listener.
-        icon:
-          type: string
-          description: >-
-            An icon that is used to identify your event listener in the ui. Needs to be
-            a data-uri containing an image.
-          maxLength: 1000000
-          pattern: '^data:.*$'
-        version:
-          type: string
-          description: >-
-            The version of the event listener. Remember to increase the value everytime
-            you update the definitions. The platform will ignore any definition
-            changes with the same event listener version. We do recommend usage of
-            semver strings.
-        description:
-          type: string
-          description: >-
-            Description for end-users to help them understand what the event listener is
-            doing.
+          description: "If the agent is deployed as a daemonset in Kubernetes, should the discovery only be called from the leader agent? This can be helpful to avoid duplicate event listener calls every running agent. You may alternatively define that the listener should run only for Steadybit agents operating within the AWS agent mode (as defined by the `STEADYBIT_AGENT_MODE` Steadybit agent environment variable / the `agent.mode` Steadybit agent Helm chart value)."
+          enum:
+            - any
+            - leader
+            - aws
         listenTo:
           type: array
           description: >-
-            List of events that the event listener want to listen to.
+            List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events.
           items:
             type: string
         includeEnvironmentVariables:
           type: array
-          description: >-
-            List of environmentVariables that should be included in the event
+          description: By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here.
           items:
             type: string
-        listen:
-          $ref: '#/components/schemas/MutatingEndpointReference'
       required:
-        - id
-        - label
-        - version
-        - description
-        - listen
+        - path
+        - method
+        - listenTo
     ListenResult:
       type: object
     DescribingEndpointReference:
@@ -132,99 +78,99 @@ components:
       type: string
       enum:
         - post
-    MutatingEndpointReference:
-      title: HTTP Endpoint Reference
-      description: HTTP endpoint which the Steadybit platform/agent could communicate with.
-      properties:
-        path:
-          type: string
-          description: Absolute path of the HTTP endpoint.
-          pattern: ^/.*$
-        method:
-          description: HTTP method to use when calling the HTTP endpoint.
-          $ref: '#/components/schemas/MutatingHttpMethod'
-      required:
-        - path
-        - method
-    Principal:
+        - put
+        - delete
+    PrincipalType:
+      type: string
+      enum:
+        - user
+        - access_token
+        - batch_job
+    UserPrincipal:
       title: User Principal
-      description: >-
-        The user principal is used to identify the user that is currently
-        interacting with the platform.
       properties:
         username:
           type: string
-          description: >-
-            The username of the user. This is the unique identifier for the user.
-            The username is used to identify the user in the platform.
+          description: This is a unique identifier for the user.
         name:
           type: string
-          description: >-
-            The name of the user. This name is used to identify the user
-            in the platform.
+          description: A human-readable name for the user.
         email:
           type: string
-          description: >-
-            The email address of the user. This email address is used to
-            identify the user in the platform.
+        principalType:
+          type: string
       required:
         - username
         - name
+        - principalType
+    AccessTokenType:
+      type: string
+      enum:
+        - admin
+        - team
+    AccessTokenPrincipal:
+      title: Access Token Principal
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: A human-readable name for the user.
+        tokenType:
+          $ref: '#/components/schemas/AccessTokenType'
+        principalType:
+          type: string
+      required:
+        - id
+        - name
+        - tokenType
+        - principalType
+    BatchPrincipal:
+      title: Batch Principal
+      properties:
+        username:
+          type: string
+          description: This is a unique identifier for the user.
+        principalType:
+          type: string
+      required:
+        - username
+        - principalType
+    Principal:
+      title: Principal
+      description: The principal describes through which activity the action was triggered.
+      anyOf:
+        - $ref: '#/components/schemas/UserPrincipal'
+        - $ref: '#/components/schemas/AccessTokenPrincipal'
+        - $ref: '#/components/schemas/BatchPrincipal'
     Tenant:
       title: Tenant
-      description: >-
-        The tenant is used to identify the tenant that the user is currently
-        interacting with.
       properties:
         key:
           type: string
-          description: >-
-            The key of the tenant. This is the unique identifier for the tenant.
-            The key is used to identify the tenant in the platform.
         name:
           type: string
-          description: >-
-            The name of the tenant. This name is used to identify the tenant
-            in the platform.
       required:
         - key
         - name
     Team:
       title: Team
-      description: >-
-        The team is used to identify the team that the user is currently
-        interacting with.
       properties:
         id:
           type: string
-          description: >-
-            The id of the team. This is the unique identifier for the team.
-            The id is used to identify the team in the platform.
         key:
           type: string
-          description: >-
-            The key of the team. This is the unique identifier for the team.
-            The key is used to identify the team in the platform.
         name:
           type: string
-          description: >-
-            The name of the team. This name is used to identify the team
-            in the platform.
       required:
         - id
         - key
         - name
     Environment:
       title: Environment
-      description: >-
-        The environment is used to identify the environment that the user is currently
-        interacting with.
       properties:
         id:
           type: string
-          description: >-
-            The id of the environment. This is the unique identifier for the environment.
-            The id is used to identify the environment in the platform.
         name:
           type: string
       required:
@@ -232,77 +178,43 @@ components:
         - name
     ExperimentExecution:
       title: Experiment Execution
-      description: >-
-        The experiment execution is used to identify the experiment execution
       properties:
         experimentKey:
           type: string
-          description: >-
-            The key of the experiment
         executionId:
           type: string
-          description: >-
-            The id of the experiment execution
         name:
           type: string
-          description: >-
-            The name of the experiment execution. This name is used to identify the experiment execution
-            in the platform.
         hypothesis:
           type: string
-          description: >-
-            The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution
-            in the platform.
         preparedTime:
           type: string
           format: date-time
-          description: >-
-            The time when the experiment execution was prepared
         startedTime:
           type: string
           format: date-time
-          description: >-
-            The time when the experiment execution was started
         endedTime:
           type: string
           format: date-time
-          description: >-
-            The time when the experiment execution was ended
         state:
           type: string
-          description: >-
-            The state of the experiment execution
           enum:
-            - CREATED
-            - PREPARED
-            - RUNNING
-            - FAILED
-            - COMPLETED
-            - CANCELED
-            - SKIPPED
-            - ERRORED
+            - created
+            - prepared
+            - running
+            - failed
+            - completed
+            - canceled
+            - skipped
+            - errored
         failureReason:
           type: string
-          description: >-
-            The failure reason of the experiment execution
         failureReasonDetails:
           type: string
-          description: >-
-            The failure reason details of the experiment execution
         variables:
           type: object
-          description: >-
-            The variables of the experiment execution
           additionalProperties:
             type: string
-        triggeredVia:
-          type: string
-          description: >-
-            The trigger of the experiment execution
-          enum:
-            - API
-            - USER
-            - SCHEDULE
       required:
         - experimentKey
         - executionId
@@ -310,16 +222,12 @@ components:
         - hypothesis
         - preparedTime
         - startedTime
-        - endedTime
         - state
-        - failureReason
-        - failureReasonDetails
         - variables
-        - triggeredVia
   requestBodies:
-    EventListenerRequestBody:
+    EventRequestBody:
       title: Consume Event Request Body
-      description: The HTTP request payload passed to the event listener listener endpoint.
+      description: The HTTP request payload passed to the event listener.
       content:
         application/json:
           schema:
@@ -361,13 +269,3 @@ components:
           schema:
             anyOf:
               - $ref: '#/components/schemas/EventListenerList'
-              - $ref: '#/components/schemas/EventKitError'
-    DescribeEventListenerResponse:
-      title: Describe Action Response
-      description: Response for the describe action endpoint
-      content:
-        application/json:
-          schema:
-            anyOf:
-              - $ref: '#/components/schemas/EventListenerDescription'
-              - $ref: '#/components/schemas/EventKitError'

@@ -4,6 +4,6 @@ generate:
 output-options:
   skip-prune: true
   exclude-schemas:
-    - ParameterOption
+    - Principal
 additional-imports:
   - package: "github.com/google/uuid"

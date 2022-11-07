@@ -1,2 +1,1 @@
-
-type ParameterOption interface {}
+type Principal interface {}

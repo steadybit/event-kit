@@ -10,40 +10,70 @@ import (
 	"github.com/google/uuid"
 )
 
+// Defines values for AccessTokenType.
+const (
+	AccessTokenTypeAdmin AccessTokenType = "admin"
+	AccessTokenTypeTeam  AccessTokenType = "team"
+)
+
 // Defines values for DescribingEndpointReferenceMethod.
 const (
 	Get DescribingEndpointReferenceMethod = "get"
 )
 
-// Defines values for EventKitErrorStatus.
+// Defines values for EventListenerRestrictTo.
 const (
-	Errored EventKitErrorStatus = "errored"
-	Failed  EventKitErrorStatus = "failed"
+	Any    EventListenerRestrictTo = "any"
+	Aws    EventListenerRestrictTo = "aws"
+	Leader EventListenerRestrictTo = "leader"
 )
 
 // Defines values for ExperimentExecutionState.
 const (
-	CANCELED  ExperimentExecutionState = "CANCELED"
-	COMPLETED ExperimentExecutionState = "COMPLETED"
-	CREATED   ExperimentExecutionState = "CREATED"
-	ERRORED   ExperimentExecutionState = "ERRORED"
-	FAILED    ExperimentExecutionState = "FAILED"
-	PREPARED  ExperimentExecutionState = "PREPARED"
-	RUNNING   ExperimentExecutionState = "RUNNING"
-	SKIPPED   ExperimentExecutionState = "SKIPPED"
-)
-
-// Defines values for ExperimentExecutionTriggeredVia.
-const (
-	API      ExperimentExecutionTriggeredVia = "API"
-	SCHEDULE ExperimentExecutionTriggeredVia = "SCHEDULE"
-	USER     ExperimentExecutionTriggeredVia = "USER"
+	Canceled  ExperimentExecutionState = "canceled"
+	Completed ExperimentExecutionState = "completed"
+	Created   ExperimentExecutionState = "created"
+	Errored   ExperimentExecutionState = "errored"
+	Failed    ExperimentExecutionState = "failed"
+	Prepared  ExperimentExecutionState = "prepared"
+	Running   ExperimentExecutionState = "running"
+	Skipped   ExperimentExecutionState = "skipped"
 )
 
 // Defines values for MutatingHttpMethod.
 const (
-	Post MutatingHttpMethod = "post"
+	Delete MutatingHttpMethod = "delete"
+	Post   MutatingHttpMethod = "post"
+	Put    MutatingHttpMethod = "put"
 )
+
+// Defines values for PrincipalType.
+const (
+	AccessToken PrincipalType = "access_token"
+	BatchJob    PrincipalType = "batch_job"
+	User        PrincipalType = "user"
+)
+
+// AccessTokenPrincipal defines model for AccessTokenPrincipal.
+type AccessTokenPrincipal struct {
+	Id string `json:"id"`
+
+	// A human-readable name for the user.
+	Name          string          `json:"name"`
+	PrincipalType string          `json:"principalType"`
+	TokenType     AccessTokenType `json:"tokenType"`
+}
+
+// AccessTokenType defines model for AccessTokenType.
+type AccessTokenType string
+
+// BatchPrincipal defines model for BatchPrincipal.
+type BatchPrincipal struct {
+	PrincipalType string `json:"principalType"`
+
+	// This is a unique identifier for the user.
+	Username string `json:"username"`
+}
 
 // HTTP endpoint which the Steadybit platform/agent could communicate with.
 type DescribingEndpointReference struct {
@@ -57,161 +87,86 @@ type DescribingEndpointReference struct {
 // HTTP method to use when calling the HTTP endpoint.
 type DescribingEndpointReferenceMethod string
 
-// The environment is used to identify the environment that the user is currently interacting with.
+// Environment defines model for Environment.
 type Environment struct {
-	// The id of the environment. This is the unique identifier for the environment. The id is used to identify the environment in the platform.
 	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
-// An enhanced version of RFC 7807 Problem Details for HTTP APIs compliant response body for error scenarios
-type EventKitError struct {
-	// A human-readable explanation specific to this occurrence of the problem.
-	Detail *string `json:"detail,omitempty"`
-
-	// A URI reference that identifies the specific occurrence of the problem.
-	Instance *string `json:"instance,omitempty"`
-
-	// * failed - The event listener has detected some failures, for example a failing test which has been implemented by the event listener. The event listener will be stopped, if this status is returned by the status endpoint. * errored - There was a technical error while executing the event listener. Will be marked as red in the platform. The event listener will be stopped, if this status is returned by the status endpoint.
-	Status *EventKitErrorStatus `json:"status,omitempty"`
-
-	// A short, human-readable summary of the problem type.
-	Title string `json:"title"`
-
-	// A URI reference that identifies the problem type.
-	Type *string `json:"type,omitempty"`
-}
-
-// * failed - The event listener has detected some failures, for example a failing test which has been implemented by the event listener. The event listener will be stopped, if this status is returned by the status endpoint. * errored - There was a technical error while executing the event listener. Will be marked as red in the platform. The event listener will be stopped, if this status is returned by the status endpoint.
-type EventKitErrorStatus string
-
-// Provides details about a possible event listener, e.g., what configuration options it has,how to trigger the listener.
-type EventListenerDescription struct {
-	// Description for end-users to help them understand what the event listener is doing.
-	Description string `json:"description"`
-
-	// An icon that is used to identify your event listener in the ui. Needs to be a data-uri containing an image.
-	Icon *string `json:"icon,omitempty"`
-
-	// A technical ID that is used to uniquely identify this type of the event listener. You will typically want to use something like `org.example.my-fancy-listener`.
-	Id string `json:"id"`
-
-	// List of environmentVariables that should be included in the event
+// EventListener defines model for EventListener.
+type EventListener struct {
+	// By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here.
 	IncludeEnvironmentVariables *[]string `json:"includeEnvironmentVariables,omitempty"`
 
-	// A human-readable label for the event listener.
-	Label string `json:"label"`
+	// List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events.
+	ListenTo []string           `json:"listenTo"`
+	Method   MutatingHttpMethod `json:"method"`
 
-	// HTTP endpoint which the Steadybit platform/agent could communicate with.
-	Listen MutatingEndpointReference `json:"listen"`
+	// Absolute path of the HTTP endpoint.
+	Path string `json:"path"`
 
-	// List of events that the event listener want to listen to.
-	ListenTo *[]string `json:"listenTo,omitempty"`
-
-	// The version of the event listener. Remember to increase the value everytime you update the definitions. The platform will ignore any definition changes with the same event listener version. We do recommend usage of semver strings.
-	Version string `json:"version"`
+	// If the agent is deployed as a daemonset in Kubernetes, should the discovery only be called from the leader agent? This can be helpful to avoid duplicate event listener calls every running agent. You may alternatively define that the listener should run only for Steadybit agents operating within the AWS agent mode (as defined by the `STEADYBIT_AGENT_MODE` Steadybit agent environment variable / the `agent.mode` Steadybit agent Helm chart value).
+	RestrictTo *EventListenerRestrictTo `json:"restrictTo,omitempty"`
 }
+
+// If the agent is deployed as a daemonset in Kubernetes, should the discovery only be called from the leader agent? This can be helpful to avoid duplicate event listener calls every running agent. You may alternatively define that the listener should run only for Steadybit agents operating within the AWS agent mode (as defined by the `STEADYBIT_AGENT_MODE` Steadybit agent environment variable / the `agent.mode` Steadybit agent Helm chart value).
+type EventListenerRestrictTo string
 
 // Lists all listeners that the platform/agent could call.
 type EventListenerList struct {
-	EventListeners []DescribingEndpointReference `json:"eventListeners"`
+	EventListeners []EventListener `json:"eventListeners"`
 }
 
-// The experiment execution is used to identify the experiment execution
+// ExperimentExecution defines model for ExperimentExecution.
 type ExperimentExecution struct {
-	// The time when the experiment execution was ended
-	EndedTime time.Time `json:"endedTime"`
-
-	// The id of the experiment execution
-	ExecutionId string `json:"executionId"`
-
-	// The key of the experiment
-	ExperimentKey string `json:"experimentKey"`
-
-	// The failure reason of the experiment execution
-	FailureReason string `json:"failureReason"`
-
-	// The failure reason details of the experiment execution
-	FailureReasonDetails string `json:"failureReasonDetails"`
-
-	// The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution in the platform.
-	Hypothesis string `json:"hypothesis"`
-
-	// The name of the experiment execution. This name is used to identify the experiment execution in the platform.
-	Name string `json:"name"`
-
-	// The time when the experiment execution was prepared
-	PreparedTime time.Time `json:"preparedTime"`
-
-	// The time when the experiment execution was started
-	StartedTime time.Time `json:"startedTime"`
-
-	// The state of the experiment execution
-	State ExperimentExecutionState `json:"state"`
-
-	// The trigger of the experiment execution
-	TriggeredVia ExperimentExecutionTriggeredVia `json:"triggeredVia"`
-
-	// The variables of the experiment execution
-	Variables map[string]string `json:"variables"`
+	EndedTime            *time.Time               `json:"endedTime,omitempty"`
+	ExecutionId          string                   `json:"executionId"`
+	ExperimentKey        string                   `json:"experimentKey"`
+	FailureReason        *string                  `json:"failureReason,omitempty"`
+	FailureReasonDetails *string                  `json:"failureReasonDetails,omitempty"`
+	Hypothesis           string                   `json:"hypothesis"`
+	Name                 string                   `json:"name"`
+	PreparedTime         time.Time                `json:"preparedTime"`
+	StartedTime          time.Time                `json:"startedTime"`
+	State                ExperimentExecutionState `json:"state"`
+	Variables            map[string]string        `json:"variables"`
 }
 
-// The state of the experiment execution
+// ExperimentExecutionState defines model for ExperimentExecution.State.
 type ExperimentExecutionState string
-
-// The trigger of the experiment execution
-type ExperimentExecutionTriggeredVia string
 
 // ListenResult defines model for ListenResult.
 type ListenResult = map[string]interface{}
 
-// HTTP endpoint which the Steadybit platform/agent could communicate with.
-type MutatingEndpointReference struct {
-	Method MutatingHttpMethod `json:"method"`
-
-	// Absolute path of the HTTP endpoint.
-	Path string `json:"path"`
-}
-
 // MutatingHttpMethod defines model for MutatingHttpMethod.
 type MutatingHttpMethod string
 
-// The user principal is used to identify the user that is currently interacting with the platform.
-type Principal struct {
-	// The email address of the user. This email address is used to identify the user in the platform.
+// PrincipalType defines model for PrincipalType.
+type PrincipalType string
+
+// Team defines model for Team.
+type Team struct {
+	Id   string `json:"id"`
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+// Tenant defines model for Tenant.
+type Tenant struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}
+
+// UserPrincipal defines model for UserPrincipal.
+type UserPrincipal struct {
 	Email *string `json:"email,omitempty"`
 
-	// The name of the user. This name is used to identify the user in the platform.
-	Name string `json:"name"`
+	// A human-readable name for the user.
+	Name          string `json:"name"`
+	PrincipalType string `json:"principalType"`
 
-	// The username of the user. This is the unique identifier for the user. The username is used to identify the user in the platform.
+	// This is a unique identifier for the user.
 	Username string `json:"username"`
-}
-
-// The team is used to identify the team that the user is currently interacting with.
-type Team struct {
-	// The id of the team. This is the unique identifier for the team. The id is used to identify the team in the platform.
-	Id string `json:"id"`
-
-	// The key of the team. This is the unique identifier for the team. The key is used to identify the team in the platform.
-	Key string `json:"key"`
-
-	// The name of the team. This name is used to identify the team in the platform.
-	Name string `json:"name"`
-}
-
-// The tenant is used to identify the tenant that the user is currently interacting with.
-type Tenant struct {
-	// The key of the tenant. This is the unique identifier for the tenant. The key is used to identify the tenant in the platform.
-	Key string `json:"key"`
-
-	// The name of the tenant. This name is used to identify the tenant in the platform.
-	Name string `json:"name"`
-}
-
-// DescribeEventListenerResponse defines model for DescribeEventListenerResponse.
-type DescribeEventListenerResponse struct {
-	union json.RawMessage
 }
 
 // EventListenerListResponse defines model for EventListenerListResponse.
@@ -219,59 +174,18 @@ type EventListenerListResponse struct {
 	union json.RawMessage
 }
 
-// EventListenerRequestBody defines model for EventListenerRequestBody.
-type EventListenerRequestBody struct {
-	// The environment is used to identify the environment that the user is currently interacting with.
-	Environment *Environment `json:"environment,omitempty"`
-	EventName   string       `json:"eventName"`
-	EventTime   time.Time    `json:"eventTime"`
-
-	// The experiment execution is used to identify the experiment execution
+// EventRequestBody defines model for EventRequestBody.
+type EventRequestBody struct {
+	Environment         *Environment         `json:"environment,omitempty"`
+	EventName           string               `json:"eventName"`
+	EventTime           time.Time            `json:"eventTime"`
 	ExperimentExecution *ExperimentExecution `json:"experimentExecution,omitempty"`
 	Id                  uuid.UUID            `json:"id"`
 
-	// The user principal is used to identify the user that is currently interacting with the platform.
+	// The principal describes through which activity the action was triggered.
 	Principal Principal `json:"principal"`
-
-	// The team is used to identify the team that the user is currently interacting with.
-	Team *Team `json:"team,omitempty"`
-
-	// The tenant is used to identify the tenant that the user is currently interacting with.
-	Tenant Tenant `json:"tenant"`
-}
-
-func (t DescribeEventListenerResponse) AsEventListenerDescription() (EventListenerDescription, error) {
-	var body EventListenerDescription
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-func (t *DescribeEventListenerResponse) FromEventListenerDescription(v EventListenerDescription) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-func (t DescribeEventListenerResponse) AsEventKitError() (EventKitError, error) {
-	var body EventKitError
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-func (t *DescribeEventListenerResponse) FromEventKitError(v EventKitError) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-func (t DescribeEventListenerResponse) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	return b, err
-}
-
-func (t *DescribeEventListenerResponse) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	return err
+	Team      *Team     `json:"team,omitempty"`
+	Tenant    Tenant    `json:"tenant"`
 }
 
 func (t EventListenerListResponse) AsEventListenerList() (EventListenerList, error) {
@@ -286,18 +200,6 @@ func (t *EventListenerListResponse) FromEventListenerList(v EventListenerList) e
 	return err
 }
 
-func (t EventListenerListResponse) AsEventKitError() (EventKitError, error) {
-	var body EventKitError
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-func (t *EventListenerListResponse) FromEventKitError(v EventKitError) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
 func (t EventListenerListResponse) MarshalJSON() ([]byte, error) {
 	b, err := t.union.MarshalJSON()
 	return b, err
@@ -307,5 +209,4 @@ func (t *EventListenerListResponse) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }
-
-type ParameterOption interface {}
+type Principal interface {}

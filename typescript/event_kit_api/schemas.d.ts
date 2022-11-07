@@ -12,48 +12,23 @@ export interface components {
 		 * @description Lists all listeners that the platform/agent could call.
 		 */
 		EventListenerList: {
-			eventListeners: components['schemas']['DescribingEndpointReference'][];
+			eventListeners: components['schemas']['EventListener'][];
 		};
-		/**
-		 * Error
-		 * @description An enhanced version of RFC 7807 Problem Details for HTTP APIs compliant response body for error scenarios
-		 */
-		EventKitError: {
+		/** Event Listener Description */
+		EventListener: {
+			/** @description Absolute path of the HTTP endpoint. */
+			path: string;
+			/** @description HTTP method to use when calling the HTTP endpoint. */
+			method: components['schemas']['MutatingHttpMethod'];
 			/**
-			 * @description * failed - The event listener has detected some failures, for example a failing test which has been implemented by the event listener. The event listener will be stopped, if this status is returned by the status endpoint. * errored - There was a technical error while executing the event listener. Will be marked as red in the platform. The event listener will be stopped, if this status is returned by the status endpoint.
-			 * @default errored
+			 * @description If the agent is deployed as a daemonset in Kubernetes, should the discovery only be called from the leader agent? This can be helpful to avoid duplicate event listener calls every running agent. You may alternatively define that the listener should run only for Steadybit agents operating within the AWS agent mode (as defined by the `STEADYBIT_AGENT_MODE` Steadybit agent environment variable / the `agent.mode` Steadybit agent Helm chart value).
 			 * @enum {string}
 			 */
-			status?: 'failed' | 'errored';
-			/** @description A URI reference that identifies the problem type. */
-			type?: string;
-			/** @description A short, human-readable summary of the problem type. */
-			title: string;
-			/** @description A human-readable explanation specific to this occurrence of the problem. */
-			detail?: string;
-			/** @description A URI reference that identifies the specific occurrence of the problem. */
-			instance?: string;
-		};
-		/**
-		 * Event Listener Description
-		 * @description Provides details about a possible event listener, e.g., what configuration options it has,how to trigger the listener.
-		 */
-		EventListenerDescription: {
-			/** @description A technical ID that is used to uniquely identify this type of the event listener. You will typically want to use something like `org.example.my-fancy-listener`. */
-			id: string;
-			/** @description A human-readable label for the event listener. */
-			label: string;
-			/** @description An icon that is used to identify your event listener in the ui. Needs to be a data-uri containing an image. */
-			icon?: string;
-			/** @description The version of the event listener. Remember to increase the value everytime you update the definitions. The platform will ignore any definition changes with the same event listener version. We do recommend usage of semver strings. */
-			version: string;
-			/** @description Description for end-users to help them understand what the event listener is doing. */
-			description: string;
-			/** @description List of events that the event listener want to listen to. */
-			listenTo?: string[];
-			/** @description List of environmentVariables that should be included in the event */
+			restrictTo?: 'any' | 'leader' | 'aws';
+			/** @description List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events. */
+			listenTo: string[];
+			/** @description By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here. */
 			includeEnvironmentVariables?: string[];
-			listen: components['schemas']['MutatingEndpointReference'];
 		};
 		ListenResult: { [key: string]: unknown };
 		/**
@@ -70,125 +45,87 @@ export interface components {
 			method: 'get';
 		};
 		/** @enum {string} */
-		MutatingHttpMethod: 'post';
-		/**
-		 * HTTP Endpoint Reference
-		 * @description HTTP endpoint which the Steadybit platform/agent could communicate with.
-		 */
-		MutatingEndpointReference: {
-			/** @description Absolute path of the HTTP endpoint. */
-			path: string;
-			/** @description HTTP method to use when calling the HTTP endpoint. */
-			method: components['schemas']['MutatingHttpMethod'];
-		};
-		/**
-		 * User Principal
-		 * @description The user principal is used to identify the user that is currently interacting with the platform.
-		 */
-		Principal: {
-			/** @description The username of the user. This is the unique identifier for the user. The username is used to identify the user in the platform. */
+		MutatingHttpMethod: 'post' | 'put' | 'delete';
+		/** @enum {string} */
+		PrincipalType: 'user' | 'access_token' | 'batch_job';
+		/** User Principal */
+		UserPrincipal: {
+			/** @description This is a unique identifier for the user. */
 			username: string;
-			/** @description The name of the user. This name is used to identify the user in the platform. */
+			/** @description A human-readable name for the user. */
 			name: string;
-			/** @description The email address of the user. This email address is used to identify the user in the platform. */
 			email?: string;
+			principalType: string;
+		};
+		/** @enum {string} */
+		AccessTokenType: 'admin' | 'team';
+		/** Access Token Principal */
+		AccessTokenPrincipal: {
+			id: string;
+			/** @description A human-readable name for the user. */
+			name: string;
+			tokenType: components['schemas']['AccessTokenType'];
+			principalType: string;
+		};
+		/** Batch Principal */
+		BatchPrincipal: {
+			/** @description This is a unique identifier for the user. */
+			username: string;
+			principalType: string;
 		};
 		/**
-		 * Tenant
-		 * @description The tenant is used to identify the tenant that the user is currently interacting with.
+		 * Principal
+		 * @description The principal describes through which activity the action was triggered.
 		 */
+		Principal: Partial<components['schemas']['UserPrincipal']> &
+			Partial<components['schemas']['AccessTokenPrincipal']> &
+			Partial<components['schemas']['BatchPrincipal']>;
+		/** Tenant */
 		Tenant: {
-			/** @description The key of the tenant. This is the unique identifier for the tenant. The key is used to identify the tenant in the platform. */
 			key: string;
-			/** @description The name of the tenant. This name is used to identify the tenant in the platform. */
 			name: string;
 		};
-		/**
-		 * Team
-		 * @description The team is used to identify the team that the user is currently interacting with.
-		 */
+		/** Team */
 		Team: {
-			/** @description The id of the team. This is the unique identifier for the team. The id is used to identify the team in the platform. */
 			id: string;
-			/** @description The key of the team. This is the unique identifier for the team. The key is used to identify the team in the platform. */
 			key: string;
-			/** @description The name of the team. This name is used to identify the team in the platform. */
 			name: string;
 		};
-		/**
-		 * Environment
-		 * @description The environment is used to identify the environment that the user is currently interacting with.
-		 */
+		/** Environment */
 		Environment: {
-			/** @description The id of the environment. This is the unique identifier for the environment. The id is used to identify the environment in the platform. */
 			id: string;
 			name: string;
 		};
-		/**
-		 * Experiment Execution
-		 * @description The experiment execution is used to identify the experiment execution
-		 */
+		/** Experiment Execution */
 		ExperimentExecution: {
-			/** @description The key of the experiment */
 			experimentKey: string;
-			/** @description The id of the experiment execution */
 			executionId: string;
-			/** @description The name of the experiment execution. This name is used to identify the experiment execution in the platform. */
 			name: string;
-			/** @description The hypothesis of the experiment execution. This hypothesis is used to identify the experiment execution in the platform. */
 			hypothesis: string;
-			/**
-			 * Format: date-time
-			 * @description The time when the experiment execution was prepared
-			 */
+			/** Format: date-time */
 			preparedTime: string;
-			/**
-			 * Format: date-time
-			 * @description The time when the experiment execution was started
-			 */
+			/** Format: date-time */
 			startedTime: string;
-			/**
-			 * Format: date-time
-			 * @description The time when the experiment execution was ended
-			 */
-			endedTime: string;
-			/**
-			 * @description The state of the experiment execution
-			 * @enum {string}
-			 */
-			state: 'CREATED' | 'PREPARED' | 'RUNNING' | 'FAILED' | 'COMPLETED' | 'CANCELED' | 'SKIPPED' | 'ERRORED';
-			/** @description The failure reason of the experiment execution */
-			failureReason: string;
-			/** @description The failure reason details of the experiment execution */
-			failureReasonDetails: string;
-			/** @description The variables of the experiment execution */
+			/** Format: date-time */
+			endedTime?: string;
+			/** @enum {string} */
+			state: 'created' | 'prepared' | 'running' | 'failed' | 'completed' | 'canceled' | 'skipped' | 'errored';
+			failureReason?: string;
+			failureReasonDetails?: string;
 			variables: { [key: string]: string };
-			/**
-			 * @description The trigger of the experiment execution
-			 * @enum {string}
-			 */
-			triggeredVia: 'API' | 'USER' | 'SCHEDULE';
 		};
 	};
 	responses: {
 		/** Response for the event list endpoint */
 		EventListenerListResponse: {
 			content: {
-				'application/json': Partial<components['schemas']['EventListenerList']> &
-					Partial<components['schemas']['EventKitError']>;
-			};
-		};
-		/** Response for the describe action endpoint */
-		DescribeEventListenerResponse: {
-			content: {
-				'application/json': Partial<components['schemas']['EventListenerDescription']> &
-					Partial<components['schemas']['EventKitError']>;
+				'application/json': Partial<components['schemas']['EventListenerList']>;
 			};
 		};
 	};
 	requestBodies: {
-		/** The HTTP request payload passed to the event listener listener endpoint. */
-		EventListenerRequestBody: {
+		/** The HTTP request payload passed to the event listener. */
+		EventRequestBody: {
 			content: {
 				'application/json': {
 					/** Format: string */
