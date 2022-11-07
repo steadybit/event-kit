@@ -16,9 +16,10 @@ export type Team = components['schemas']['Team'];
 export type Environment = components['schemas']['Environment'];
 export type ExperimentExecution = components['schemas']['ExperimentExecution'];
 
-
-export type EventListenerListResponse = components['responses']['EventListenerListResponse']['content']['application/json'];
-export type DescribeEventListenerResponse = components['responses']['DescribeEventListenerResponse']['content']['application/json'];
+export type EventListenerListResponse =
+	components['responses']['EventListenerListResponse']['content']['application/json'];
+export type DescribeEventListenerResponse =
+	components['responses']['DescribeEventListenerResponse']['content']['application/json'];
 
 export type EventListenerRequestBody =
 	components['requestBodies']['EventListenerRequestBody']['content']['application/json'];
