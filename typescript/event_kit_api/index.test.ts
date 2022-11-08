@@ -8,7 +8,7 @@ export const eventListenerList: EventListenerList = {
 		{
 			method: 'post',
 			path: '/events/mylistener',
-			includeEnvironmentVariables: ['env1', 'env2'],
+			restrictTo: 'aws',
 			listenTo: ['my-event-name'],
 		}
 	]

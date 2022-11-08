@@ -27,8 +27,6 @@ export interface components {
 			restrictTo?: 'any' | 'leader' | 'aws';
 			/** @description List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events. */
 			listenTo: string[];
-			/** @description By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here. */
-			includeEnvironmentVariables?: string[];
 		};
 		ListenResult: { [key: string]: unknown };
 		/**

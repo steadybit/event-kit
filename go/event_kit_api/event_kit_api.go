@@ -95,9 +95,6 @@ type Environment struct {
 
 // EventListener defines model for EventListener.
 type EventListener struct {
-	// By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here.
-	IncludeEnvironmentVariables *[]string `json:"includeEnvironmentVariables,omitempty"`
-
 	// List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events.
 	ListenTo []string           `json:"listenTo"`
 	Method   MutatingHttpMethod `json:"method"`

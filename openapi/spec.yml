@@ -47,11 +47,6 @@ components:
             List of event names that the event listener want to listen to. You may optionally define the special `*` event name to listen to all events.
           items:
             type: string
-        includeEnvironmentVariables:
-          type: array
-          description: By default, event listeners do not receive any environment variables. To receive environment variables you need to explicitly list the environment variables keys here.
-          items:
-            type: string
       required:
         - path
         - method

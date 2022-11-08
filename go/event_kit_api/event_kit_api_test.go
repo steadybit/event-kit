@@ -91,11 +91,10 @@ func Ptr[T any](val T) *T {
 
 func TestEventListenerDescription(t *testing.T) {
 	v := EventListener{
-		Method:                      Post,
-		Path:                        "/events/mylistener/listen",
-		ListenTo:                    []string{"*"},
-		IncludeEnvironmentVariables: Ptr([]string{"das"}),
-		RestrictTo:                  Ptr(Aws),
+		Method:     Post,
+		Path:       "/events/mylistener/listen",
+		ListenTo:   []string{"*"},
+		RestrictTo: Ptr(Aws),
 	}
 	markAsUsed(t, v)
 }
