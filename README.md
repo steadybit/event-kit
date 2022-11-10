@@ -1,10 +1,14 @@
-<img src="./logo.png" height="130" align="right" alt="EventKit logo depicting a crosshair within a rounded rectangle">
+<img src="./logo.png" height="130" align="right" alt="EventKit logo depicting a bell icon within a rounded rectangle">
 
 # Steadybit EventKit
 
-The Steadybit EventKit enables the extension of Steadybit with new event listener capabilities. For example, EventKit can be used to author open/closed source:
+EventKit allows extensions to consume events from the Steadybit platform to integrate with third-party systems. Extensions leveraging EventKit are similar to webhooks but do not face the typical web routing issues as Steadybit agents handle this aspect. You can use EventKit to:
 
-- notify listeners and other systems about started / ended experiments and their meta data
+ - Forward audit logs to an external system.
+ - Add markers to monitoring systems' charts during experiment executions.
+ - Capture experiment execution statistics.
+ - Report information about experiment executions to Slack, Discord etc.
+
 
 At this moment, EventKit can be considered an **open-beta**. The contracts and APIs *may* change. If you want to learn more, [reach out to us](https://www.steadybit.com/contact).
 
