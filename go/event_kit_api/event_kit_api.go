@@ -117,7 +117,7 @@ type EventListenerList struct {
 // ExperimentExecution defines model for ExperimentExecution.
 type ExperimentExecution struct {
 	EndedTime            *time.Time               `json:"endedTime,omitempty"`
-	ExecutionId          string                   `json:"executionId"`
+	ExecutionId          float32                  `json:"executionId"`
 	ExperimentKey        string                   `json:"experimentKey"`
 	FailureReason        *string                  `json:"failureReason,omitempty"`
 	FailureReasonDetails *string                  `json:"failureReasonDetails,omitempty"`

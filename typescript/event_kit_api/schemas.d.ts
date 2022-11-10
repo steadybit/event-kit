@@ -97,7 +97,7 @@ export interface components {
 		/** Experiment Execution */
 		ExperimentExecution: {
 			experimentKey: string;
-			executionId: string;
+			executionId: number;
 			name: string;
 			hypothesis: string;
 			/** Format: date-time */

@@ -17,13 +17,22 @@ go get github.com/steadybit/event-kit/go/event_kit_api
 ```go
 import (
 	"github.com/steadybit/event-kit/go/event_kit_api"
+    "github.com/steadybit/extension-kit/extutil"
 )
 
-eventList := event_kit_api.EventList{
-    Events: []event_kit_api.DescribingEndpointReference{
+eventList := event_kit_api.EventListenerList{
+    EventListeners: []event_kit_api.EventListener{
         {
-            "GET",
-            "/events/mylistener",
+            Method:     "POST",
+            Path:       "/events/experiment-started",
+            ListenTo:   []string{"experiment.execution.created"},
+            RestrictTo: extutil.Ptr(event_kit_api.Leader),
+        },
+        {
+            Method:     "POST",
+            Path:       "/events/experiment-completed",
+            ListenTo:   []string{"experiment.execution.completed"},
+            RestrictTo: extutil.Ptr(event_kit_api.Leader),
         },
     },
 }

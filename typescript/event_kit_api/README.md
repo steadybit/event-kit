@@ -12,5 +12,5 @@ npm install --save-dev @steadybit/event-kit-api
 ## Usage
 
 ```typescript
-import { EventList } from '@steadybit/event-kit-api';
+import { EventListenerList } from '@steadybit/event-kit-api';
 ```

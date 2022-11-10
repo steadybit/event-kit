@@ -29,7 +29,7 @@ func TestEventListenerRequestBody(t *testing.T) {
 		EventTime: time.Now(),
 		ExperimentExecution: Ptr(ExperimentExecution{
 			EndedTime:            Ptr(time.Now()),
-			ExecutionId:          "ExecutionId",
+			ExecutionId:          42,
 			ExperimentKey:        "ExperimentKey",
 			FailureReason:        Ptr("FailureReason"),
 			FailureReasonDetails: Ptr("FailureReasonDetails"),

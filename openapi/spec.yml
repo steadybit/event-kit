@@ -177,7 +177,7 @@ components:
         experimentKey:
           type: string
         executionId:
-          type: string
+          type: number
         name:
           type: string
         hypothesis:

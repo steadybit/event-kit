@@ -30,7 +30,7 @@ export const eventListenerRequestBody: EventRequestBody = {
 	},
 	experimentExecution: {
 		endedTime: '2021-09-01T12:00:00Z',
-		executionId: 'my-execution-id',
+		executionId: 42,
 		experimentKey: 'my-experiment-key',
 		failureReason: 'my-failure-reason',
 		hypothesis: 'my-hypothesis',
