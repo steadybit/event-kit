@@ -38,11 +38,7 @@ export const eventListenerRequestBody: EventRequestBody = {
 		preparedTime: '2021-09-01T12:00:00Z',
 		startedTime: '2021-09-01T12:00:00Z',
 		state: 'created',
-		failureReasonDetails: 'my-failure-reason-details',
-		variables: {
-			'var1': 'value1',
-			'var2': 'value2'
-		}
+		failureReasonDetails: 'my-failure-reason-details'
 	},
 	eventName: 'my-event-name',
 	eventTime: '2021-09-01T12:00:00Z',

@@ -206,10 +206,6 @@ components:
           type: string
         failureReasonDetails:
           type: string
-        variables:
-          type: object
-          additionalProperties:
-            type: string
       required:
         - experimentKey
         - executionId
@@ -218,7 +214,6 @@ components:
         - preparedTime
         - startedTime
         - state
-        - variables
   requestBodies:
     EventRequestBody:
       title: Consume Event Request Body

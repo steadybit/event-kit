@@ -38,7 +38,6 @@ func TestEventListenerRequestBody(t *testing.T) {
 			PreparedTime:         time.Time{},
 			StartedTime:          time.Time{},
 			State:                Created,
-			Variables:            make(map[string]string),
 		}),
 		Id: uuid.New(),
 		Principal: UserPrincipal{

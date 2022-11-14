@@ -110,7 +110,6 @@ export interface components {
 			state: 'created' | 'prepared' | 'running' | 'failed' | 'completed' | 'canceled' | 'skipped' | 'errored';
 			failureReason?: string;
 			failureReasonDetails?: string;
-			variables: { [key: string]: string };
 		};
 	};
 	responses: {

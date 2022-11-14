@@ -126,7 +126,6 @@ type ExperimentExecution struct {
 	PreparedTime         time.Time                `json:"preparedTime"`
 	StartedTime          time.Time                `json:"startedTime"`
 	State                ExperimentExecutionState `json:"state"`
-	Variables            map[string]string        `json:"variables"`
 }
 
 // ExperimentExecutionState defines model for ExperimentExecution.State.
