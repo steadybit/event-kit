@@ -69,7 +69,6 @@ Defines which agents should call this event listener (defaults to `leader`). Thi
 ### References
 
 - [Go API](https://github.com/steadybit/event-kit/tree/main/go/event_kit_api): `EventListenerList`
-- [TypeScript API](https://github.com/steadybit/event-kit/tree/main/typescript/event_kit_api): `EventListenerList`
 - [OpenAPI Schema](https://github.com/steadybit/event-kit/tree/main/openapi): `EventListenerList`
 
 
@@ -120,5 +119,4 @@ Each time a Steadybit event occurs that matches the `listenTo` and `restrictTo` 
 ### References
 
 - [Go API](https://github.com/steadybit/event-kit/tree/main/go/event_kit_api): `EventRequestBody`
-- [TypeScript API](https://github.com/steadybit/event-kit/tree/main/typescript/event_kit_api): `EventRequestBody`
 - [OpenAPI Schema](https://github.com/steadybit/event-kit/tree/main/openapi): `EventRequestBody`
