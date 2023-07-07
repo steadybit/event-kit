@@ -25,7 +25,7 @@ func TestEventListenerRequestBody(t *testing.T) {
 			Id:   "test",
 			Name: "gateway",
 		}),
-		EventName: "experiment.started",
+		EventName: "experiment.step.started",
 		EventTime: time.Now(),
 		ExperimentExecution: Ptr(ExperimentExecution{
 			EndedTime:            Ptr(time.Now()),
@@ -37,7 +37,28 @@ func TestEventListenerRequestBody(t *testing.T) {
 			Name:                 "Name",
 			PreparedTime:         time.Time{},
 			StartedTime:          time.Time{},
-			State:                Created,
+			State:                ExperimentExecutionStateCreated,
+			Steps: []ExperimentStepExecution{
+				{
+					Type:        Action,
+					ActionId:    Ptr("action-id"),
+					Id:          uuid.New(),
+					EndedTime:   Ptr(time.Now()),
+					StartedTime: Ptr(time.Now()),
+					State:       ExperimentStepExecutionStateCreated,
+					TargetExecutions: Ptr([]ExperimentStepExecutionTarget{
+						{
+							AgentHostname: "agent-123",
+							TargetAttributes: map[string][]string{
+								"target.name":   {"test-target"},
+								"target.colors": {"red", "green", "blue"},
+							},
+							TargetName: "test-target",
+							TargetType: "target-type-test",
+						},
+					}),
+				},
+			},
 		}),
 		Id: uuid.New(),
 		Principal: UserPrincipal{

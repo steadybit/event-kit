@@ -30,14 +30,32 @@ const (
 
 // Defines values for ExperimentExecutionState.
 const (
-	Canceled  ExperimentExecutionState = "canceled"
-	Completed ExperimentExecutionState = "completed"
-	Created   ExperimentExecutionState = "created"
-	Errored   ExperimentExecutionState = "errored"
-	Failed    ExperimentExecutionState = "failed"
-	Prepared  ExperimentExecutionState = "prepared"
-	Running   ExperimentExecutionState = "running"
-	Skipped   ExperimentExecutionState = "skipped"
+	ExperimentExecutionStateCanceled  ExperimentExecutionState = "canceled"
+	ExperimentExecutionStateCompleted ExperimentExecutionState = "completed"
+	ExperimentExecutionStateCreated   ExperimentExecutionState = "created"
+	ExperimentExecutionStateErrored   ExperimentExecutionState = "errored"
+	ExperimentExecutionStateFailed    ExperimentExecutionState = "failed"
+	ExperimentExecutionStatePrepared  ExperimentExecutionState = "prepared"
+	ExperimentExecutionStateRunning   ExperimentExecutionState = "running"
+	ExperimentExecutionStateSkipped   ExperimentExecutionState = "skipped"
+)
+
+// Defines values for ExperimentStepExecutionState.
+const (
+	ExperimentStepExecutionStateCanceled  ExperimentStepExecutionState = "canceled"
+	ExperimentStepExecutionStateCompleted ExperimentStepExecutionState = "completed"
+	ExperimentStepExecutionStateCreated   ExperimentStepExecutionState = "created"
+	ExperimentStepExecutionStateErrored   ExperimentStepExecutionState = "errored"
+	ExperimentStepExecutionStateFailed    ExperimentStepExecutionState = "failed"
+	ExperimentStepExecutionStatePrepared  ExperimentStepExecutionState = "prepared"
+	ExperimentStepExecutionStateRunning   ExperimentStepExecutionState = "running"
+	ExperimentStepExecutionStateSkipped   ExperimentStepExecutionState = "skipped"
+)
+
+// Defines values for ExperimentStepExecutionType.
+const (
+	Action ExperimentStepExecutionType = "action"
+	Wait   ExperimentStepExecutionType = "wait"
 )
 
 // Defines values for MutatingHttpMethod.
@@ -116,20 +134,46 @@ type EventListenerList struct {
 
 // ExperimentExecution defines model for ExperimentExecution.
 type ExperimentExecution struct {
-	EndedTime            *time.Time               `json:"endedTime,omitempty"`
-	ExecutionId          float32                  `json:"executionId"`
-	ExperimentKey        string                   `json:"experimentKey"`
-	FailureReason        *string                  `json:"failureReason,omitempty"`
-	FailureReasonDetails *string                  `json:"failureReasonDetails,omitempty"`
-	Hypothesis           string                   `json:"hypothesis"`
-	Name                 string                   `json:"name"`
-	PreparedTime         time.Time                `json:"preparedTime"`
-	StartedTime          time.Time                `json:"startedTime"`
-	State                ExperimentExecutionState `json:"state"`
+	EndedTime            *time.Time                `json:"endedTime,omitempty"`
+	ExecutionId          float32                   `json:"executionId"`
+	ExperimentKey        string                    `json:"experimentKey"`
+	FailureReason        *string                   `json:"failureReason,omitempty"`
+	FailureReasonDetails *string                   `json:"failureReasonDetails,omitempty"`
+	Hypothesis           string                    `json:"hypothesis"`
+	Name                 string                    `json:"name"`
+	PreparedTime         time.Time                 `json:"preparedTime"`
+	StartedTime          time.Time                 `json:"startedTime"`
+	State                ExperimentExecutionState  `json:"state"`
+	Steps                []ExperimentStepExecution `json:"steps"`
 }
 
 // ExperimentExecutionState defines model for ExperimentExecution.State.
 type ExperimentExecutionState string
+
+// ExperimentStepExecution defines model for ExperimentStepExecution.
+type ExperimentStepExecution struct {
+	ActionId         *string                          `json:"actionId,omitempty"`
+	EndedTime        *time.Time                       `json:"endedTime,omitempty"`
+	Id               uuid.UUID                        `json:"id"`
+	StartedTime      *time.Time                       `json:"startedTime,omitempty"`
+	State            ExperimentStepExecutionState     `json:"state"`
+	TargetExecutions *[]ExperimentStepExecutionTarget `json:"targetExecutions,omitempty"`
+	Type             ExperimentStepExecutionType      `json:"type"`
+}
+
+// ExperimentStepExecutionState defines model for ExperimentStepExecution.State.
+type ExperimentStepExecutionState string
+
+// ExperimentStepExecutionType defines model for ExperimentStepExecution.Type.
+type ExperimentStepExecutionType string
+
+// ExperimentStepExecutionTarget defines model for ExperimentStepExecutionTarget.
+type ExperimentStepExecutionTarget struct {
+	AgentHostname    string              `json:"agentHostname"`
+	TargetAttributes map[string][]string `json:"targetAttributes"`
+	TargetName       string              `json:"targetName"`
+	TargetType       string              `json:"targetType"`
+}
 
 // ListenResult defines model for ListenResult.
 type ListenResult = map[string]interface{}
@@ -205,4 +249,5 @@ func (t *EventListenerListResponse) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }
-type Principal interface {}
+
+type Principal interface{}

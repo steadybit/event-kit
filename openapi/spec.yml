@@ -206,6 +206,10 @@ components:
           type: string
         failureReasonDetails:
           type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentStepExecution'
       required:
         - experimentKey
         - executionId
@@ -214,6 +218,68 @@ components:
         - preparedTime
         - startedTime
         - state
+        - steps
+    ExperimentStepExecution:
+      title: Experiment Step Execution
+      properties:
+        type:
+          type: string
+          enum:
+            - wait
+            - action
+        actionId:
+          type: string
+        id:
+          type: string
+          format: string
+          x-go-type: uuid.UUID
+          x-go-type-import:
+            path: github.com/google/uuid
+        startedTime:
+          type: string
+          format: date-time
+        endedTime:
+          type: string
+          format: date-time
+        state:
+          type: string
+          enum:
+            - created
+            - prepared
+            - running
+            - failed
+            - completed
+            - canceled
+            - skipped
+            - errored
+        targetExecutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentStepExecutionTarget'
+      required:
+        - id
+        - state
+        - type
+    ExperimentStepExecutionTarget:
+      title: Experiment Step Execution Target
+      properties:
+        agentHostname:
+          type: string
+        targetName:
+          type: string
+        targetType:
+            type: string
+        targetAttributes:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      required:
+        - agentHostname
+        - targetName
+        - targetType
+        - targetAttributes
   requestBodies:
     EventRequestBody:
       title: Consume Event Request Body
