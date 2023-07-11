@@ -40,6 +40,14 @@ const (
 	ExperimentExecutionStateSkipped   ExperimentExecutionState = "skipped"
 )
 
+// Defines values for ExperimentStepExecutionActionKind.
+const (
+	Attack   ExperimentStepExecutionActionKind = "attack"
+	Check    ExperimentStepExecutionActionKind = "check"
+	LoadTest ExperimentStepExecutionActionKind = "load_test"
+	Other    ExperimentStepExecutionActionKind = "other"
+)
+
 // Defines values for ExperimentStepExecutionState.
 const (
 	ExperimentStepExecutionStateCanceled  ExperimentStepExecutionState = "canceled"
@@ -152,14 +160,20 @@ type ExperimentExecutionState string
 
 // ExperimentStepExecution defines model for ExperimentStepExecution.
 type ExperimentStepExecution struct {
-	ActionId         *string                          `json:"actionId,omitempty"`
-	EndedTime        *time.Time                       `json:"endedTime,omitempty"`
-	Id               uuid.UUID                        `json:"id"`
-	StartedTime      *time.Time                       `json:"startedTime,omitempty"`
-	State            ExperimentStepExecutionState     `json:"state"`
-	TargetExecutions *[]ExperimentStepExecutionTarget `json:"targetExecutions,omitempty"`
-	Type             ExperimentStepExecutionType      `json:"type"`
+	ActionId         *string                            `json:"actionId,omitempty"`
+	ActionKind       *ExperimentStepExecutionActionKind `json:"actionKind,omitempty"`
+	ActionName       *string                            `json:"actionName,omitempty"`
+	CustomLabel      *string                            `json:"customLabel,omitempty"`
+	EndedTime        *time.Time                         `json:"endedTime,omitempty"`
+	Id               uuid.UUID                          `json:"id"`
+	StartedTime      *time.Time                         `json:"startedTime,omitempty"`
+	State            ExperimentStepExecutionState       `json:"state"`
+	TargetExecutions *[]ExperimentStepExecutionTarget   `json:"targetExecutions,omitempty"`
+	Type             ExperimentStepExecutionType        `json:"type"`
 }
+
+// ExperimentStepExecutionActionKind defines model for ExperimentStepExecution.ActionKind.
+type ExperimentStepExecutionActionKind string
 
 // ExperimentStepExecutionState defines model for ExperimentStepExecution.State.
 type ExperimentStepExecutionState string

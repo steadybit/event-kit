@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Added more information to `ExperimentStepExecution` events
+
 ## 1.2.0
 
 - Added Step-Detais to execution events
