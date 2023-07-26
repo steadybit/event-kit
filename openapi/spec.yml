@@ -321,6 +321,12 @@ components:
                 $ref: '#/components/schemas/Environment'
               experimentExecution:
                 $ref: '#/components/schemas/ExperimentExecution'
+              stepExecutionId:
+                type: string
+                format: string
+                x-go-type: uuid.UUID
+                x-go-type-import:
+                  path: github.com/google/uuid
             required:
               - id
               - eventName

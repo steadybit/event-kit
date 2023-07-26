@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- Added `stepExecutionId` for events related to steps
+
 ## 1.2.1
 
 - Added more information to `ExperimentStepExecution` events

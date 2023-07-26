@@ -237,9 +237,10 @@ type EventRequestBody struct {
 	Id                  uuid.UUID            `json:"id"`
 
 	// The principal describes through which activity the action was triggered.
-	Principal Principal `json:"principal"`
-	Team      *Team     `json:"team,omitempty"`
-	Tenant    Tenant    `json:"tenant"`
+	Principal       Principal  `json:"principal"`
+	StepExecutionId *uuid.UUID `json:"stepExecutionId,omitempty"`
+	Team            *Team      `json:"team,omitempty"`
+	Tenant          Tenant     `json:"tenant"`
 }
 
 func (t EventListenerListResponse) AsEventListenerList() (EventListenerList, error) {
