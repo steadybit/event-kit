@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+
+- Use uuid type for `stepExecutionId`
+
 ## 1.2.2
 
 - Added `stepExecutionId` for events related to steps
