@@ -21,7 +21,7 @@ jobs:
       run:
         working-directory: ./go/event_kit_api
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # increased fetch depth to support git diff
         fetch-depth: 2
