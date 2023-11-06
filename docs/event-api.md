@@ -76,6 +76,8 @@ Defines which agents should call this event listener (defaults to `leader`). Thi
 
 Each time a Steadybit event occurs that matches the `listenTo` and `restrictTo` configuration, Steadybit will send a request to the endpoint. The request will contain the event data.
 
+Please note that event data is not provided in real time. Outpost agents are polling the platform for new events within the configured registration interval (default: 5 seconds). The amount of returned events per registration interval is limited to 50, following events will be submitted within the next intervals.
+
 #### Example
 
 ```json

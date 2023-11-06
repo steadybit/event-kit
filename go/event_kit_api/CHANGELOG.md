@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- EventRequestBody will either contain `experimentExecution`, `experimentStepExecution` or `experimentStepExecutionTarget` depending on the event type
+
 ## 1.2.3
 
 - Use uuid type for `stepExecutionId`

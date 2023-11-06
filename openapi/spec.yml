@@ -202,14 +202,12 @@ components:
             - canceled
             - skipped
             - errored
-        failureReason:
+        reason:
           type: string
-        failureReasonDetails:
+          description: Additional information about the reason for the state.
+        reasonDetails:
           type: string
-        steps:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExperimentStepExecution'
+          description: Additional information about the reason for the state.
       required:
         - experimentKey
         - executionId
@@ -218,10 +216,13 @@ components:
         - preparedTime
         - startedTime
         - state
-        - steps
     ExperimentStepExecution:
       title: Experiment Step Execution
       properties:
+        experimentKey:
+          type: string
+        executionId:
+          type: number
         id:
           type: string
           format: string
@@ -263,17 +264,48 @@ components:
             - canceled
             - skipped
             - errored
-        targetExecutions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExperimentStepExecutionTarget'
       required:
+        - experimentKey
+        - executionId
         - id
         - state
         - type
-    ExperimentStepExecutionTarget:
-      title: Experiment Step Execution Target
+    ExperimentStepTargetExecution:
+      title: Experiment Step Target Execution
       properties:
+        experimentKey:
+          type: string
+        executionId:
+          type: number
+        stepExecutionId:
+          type: string
+          format: string
+          x-go-type: uuid.UUID
+          x-go-type-import:
+            path: github.com/google/uuid
+        id:
+          type: string
+          format: string
+          x-go-type: uuid.UUID
+          x-go-type-import:
+            path: github.com/google/uuid
+        startedTime:
+          type: string
+          format: date-time
+        endedTime:
+          type: string
+          format: date-time
+        state:
+          type: string
+          enum:
+            - created
+            - prepared
+            - running
+            - failed
+            - completed
+            - canceled
+            - skipped
+            - errored
         agentHostname:
           type: string
         targetName:
@@ -286,7 +318,18 @@ components:
             type: array
             items:
               type: string
+        reason:
+          type: string
+          description: Additional information about the reason for the state.
+        reasonDetails:
+          type: string
+          description: Additional information about the reason for the state.
       required:
+        - experimentKey
+        - executionId
+        - stepExecutionId
+        - id
+        - state
         - agentHostname
         - targetName
         - targetType
@@ -321,12 +364,10 @@ components:
                 $ref: '#/components/schemas/Environment'
               experimentExecution:
                 $ref: '#/components/schemas/ExperimentExecution'
-              stepExecutionId:
-                type: string
-                format: string
-                x-go-type: uuid.UUID
-                x-go-type-import:
-                  path: github.com/google/uuid
+              experimentStepExecution:
+                $ref: '#/components/schemas/ExperimentStepExecution'
+              experimentStepTargetExecution:
+                $ref: '#/components/schemas/ExperimentStepTargetExecution'
             required:
               - id
               - eventName
