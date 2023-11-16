@@ -312,5 +312,4 @@ func (t *EventListenerListResponse) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }
-
-type Principal interface{}
+type Principal interface {}
