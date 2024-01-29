@@ -3,7 +3,7 @@ module github.com/steadybit/event-kit/go/event_kit_api
 go 1.21
 
 require (
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	github.com/oapi-codegen/runtime v1.1.1
 )
 
