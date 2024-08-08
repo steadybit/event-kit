@@ -14,13 +14,14 @@ As can be seen above, the extension is called by the Steadybit agent in two phas
 - In the event listeners registration phase, Steadybit learns about the supported event listeners. Once this phase is completed,
 - Event listeners will be automatically called by Steadybit, e.g., during the experiment execution.
 
-The following sections explain the various API endpoints, their responsibilities and structures in more detail.
+The following sections explain the various API endpoints, their responsibilities, and structures in more detail.
 
 ## Event Listeners List
 
 As the name implies, the action list returns a list of supported event listeners. Or, more specifically, HTTP endpoints that the agent should call to learn more
-about
-the event listeners.
+about the event listeners.
+
+All paths will be resolved relative to the URL used to register the extension at the agent. For example, if `https://extension/some-path` was used to register and this endpoint returns `/events/all,` the agent will make the request to `https://extension/some-path/events/all.` This allows extensions to run behind reverse proxies, rewriting the path. 
 
 This endpoint needs to be [registered with Steadybit agents](./event-registration.md).
 
@@ -44,7 +45,7 @@ This endpoint needs to be [registered with Steadybit agents](./event-registratio
 
 ### listenTo
 
-Defines the event names that you want to subscribe to. The special case `["*"]` means subscribe to all. At the moment we support:
+Defines the event names that you want to subscribe to. The special case `["*"]` means subscribe to all. At the moment, we support:
 
  - `*`
  - `user.invited`
