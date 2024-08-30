@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Steadybit GmbH
+// SPDX-FileCopyrightText: 2024 Steadybit GmbH
 
 package event_kit_api
 
@@ -118,10 +118,9 @@ func Ptr[T any](val T) *T {
 
 func TestEventListenerDescription(t *testing.T) {
 	v := EventListener{
-		Method:     Post,
-		Path:       "/events/mylistener/listen",
-		ListenTo:   []string{"*"},
-		RestrictTo: Ptr(Aws),
+		Method:   Post,
+		Path:     "/events/mylistener/listen",
+		ListenTo: []string{"*"},
 	}
 	markAsUsed(t, v)
 }

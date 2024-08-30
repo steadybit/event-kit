@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Steadybit EventKit API
-  version: 1.0.0
+  version: 1.1.0
   license:
     name: MIT
     identifier: MIT
@@ -34,13 +34,6 @@ components:
         method:
           description: HTTP method to use when calling the HTTP endpoint.
           $ref: '#/components/schemas/MutatingHttpMethod'
-        restrictTo:
-          type: string
-          description: "If the agent is deployed as a daemonset in Kubernetes, should the discovery only be called from the leader agent? This can be helpful to avoid duplicate event listener calls every running agent. You may alternatively define that the listener should run only for Steadybit agents operating within the AWS agent mode (as defined by the `STEADYBIT_AGENT_MODE` Steadybit agent environment variable / the `agent.mode` Steadybit agent Helm chart value)."
-          enum:
-            - any
-            - leader
-            - aws
         listenTo:
           type: array
           description: >-

@@ -36,8 +36,7 @@ This endpoint needs to be [registered with Steadybit agents](./event-registratio
     {
       "method": "POST",
       "path": "/events/all",
-      "listenTo": ["*"],
-      "restrictTo": "leader"
+      "listenTo": ["experiment.execution.created", "experiment.execution.failed", "experiment.execution.canceled", "experiment.execution.completed"]
     }
   ]
 }
@@ -63,10 +62,6 @@ Defines the event names that you want to subscribe to. The special case `["*"]` 
  - `experiment.execution.step-failed`
  - `experiment.execution.step-completed`
 
-### restrictTo
-
-Defines which agents should call this event listener (defaults to `leader`). This is useful to simplify extension and agent deployment, i.e., you can configure the extension on all agents in a cluster while ensuring that you only get a single call.
-
 ### References
 
 - [Go API](https://github.com/steadybit/event-kit/tree/main/go/event_kit_api): `EventListenerList`
@@ -75,7 +70,7 @@ Defines which agents should call this event listener (defaults to `leader`). Thi
 
 ## Event Consumption
 
-Each time a Steadybit event occurs that matches the `listenTo` and `restrictTo` configuration, Steadybit will send a request to the endpoint. The request will contain the event data.
+Each time a Steadybit event occurs that matches the `listenTo` configuration, Steadybit will send a request to the endpoint. The request will contain the event data.
 
 Please note that event data is not provided in real time. Agents are polling the platform for new events within the configured registration interval (default: 5 seconds). The amount of returned events per registration interval is limited to 50, following events will be submitted within the next intervals.
 

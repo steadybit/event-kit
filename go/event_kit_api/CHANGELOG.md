@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Removed `restrictTo` from `EventListener` 
+
 ## 1.3.1
 
 - EventRequestBody will either contain `experimentExecution`, `experimentStepExecution` or `experimentStepExecutionTarget` depending on the event type

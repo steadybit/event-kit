@@ -26,13 +26,11 @@ eventList := event_kit_api.EventListenerList{
             Method:     "POST",
             Path:       "/events/experiment-started",
             ListenTo:   []string{"experiment.execution.created"},
-            RestrictTo: extutil.Ptr(event_kit_api.Leader),
         },
         {
             Method:     "POST",
             Path:       "/events/experiment-completed",
             ListenTo:   []string{"experiment.execution.completed"},
-            RestrictTo: extutil.Ptr(event_kit_api.Leader),
         },
     },
 }
