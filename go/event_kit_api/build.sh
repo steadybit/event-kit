@@ -9,6 +9,3 @@ set -eo pipefail
 
 go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.3.0
 oapi-codegen -config generator-config.yml -o event_kit_api.go ../../openapi/spec.yml
-
-cat extras.go.txt >> event_kit_api.go
-go fmt event_kit_api.go
