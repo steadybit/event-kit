@@ -47,7 +47,6 @@ This endpoint needs to be [registered with Steadybit agents](./event-registratio
 Defines the event names that you want to subscribe to. The special case `["*"]` means subscribe to all. At the moment, we support:
 
  - `*`
- - `user.invited`
  - `killswitch.engaged`
  - `killswitch.disengaged`
  - `experiment.execution.created`
