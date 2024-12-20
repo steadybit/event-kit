@@ -31,7 +31,6 @@ const (
 	ExperimentExecutionStateFailed    ExperimentExecutionState = "failed"
 	ExperimentExecutionStatePrepared  ExperimentExecutionState = "prepared"
 	ExperimentExecutionStateRunning   ExperimentExecutionState = "running"
-	ExperimentExecutionStateSkipped   ExperimentExecutionState = "skipped"
 )
 
 // Defines values for ExperimentStepExecutionActionKind.

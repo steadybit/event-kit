@@ -193,7 +193,6 @@ components:
             - failed
             - completed
             - canceled
-            - skipped
             - errored
         reason:
           type: string

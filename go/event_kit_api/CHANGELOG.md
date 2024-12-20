@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+- Removed `skipped` from `ExperimentStepExecution` States as this is not a valid state
+
 ## 1.4.0
 
 - Removed `restrictTo` from `EventListener` 
