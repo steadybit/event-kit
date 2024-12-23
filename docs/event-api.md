@@ -60,6 +60,11 @@ Defines the event names that you want to subscribe to. The special case `["*"]` 
  - `experiment.execution.step-skipped`
  - `experiment.execution.step-failed`
  - `experiment.execution.step-completed`
+ - `experiment.execution.target-started`
+ - `experiment.execution.target-errored`
+ - `experiment.execution.target-canceled`
+ - `experiment.execution.target-failed`
+ - `experiment.execution.target-completed`
 
 ### References
 
