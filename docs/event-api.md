@@ -49,6 +49,7 @@ Defines the event names that you want to subscribe to. The special case `["*"]` 
  - `*`
  - `killswitch.engaged`
  - `killswitch.disengaged`
+ - `experiment.execution.requested`
  - `experiment.execution.created`
  - `experiment.execution.failed`
  - `experiment.execution.errored`
