@@ -1,4 +1,4 @@
-<img src="./logo.png" height="130" align="right" alt="EventKit logo depicting a bell icon within a rounded rectangle">
+<img src="./logo.png" height="70" align="right" alt="EventKit logo depicting a bell icon within a rounded rectangle">
 
 # Steadybit EventKit
 
