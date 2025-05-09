@@ -27,7 +27,7 @@ jobs:
         fetch-depth: 2
     - uses: actions/setup-go@v5
       with:
-        go-version: '1.22'
+        go-version: '1.24'
     - run: ./build.sh
     - run: go get
     - run: go test
