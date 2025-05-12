@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.0
+
+- Update dependencies (golang 1.24)
+
 ## 1.5.0
 
 - Removed `skipped` from `ExperimentStepExecution` States as this is not a valid state
