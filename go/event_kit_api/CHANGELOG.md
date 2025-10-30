@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Added `properties` to `ExperimentExecution`-Events (requires platform version 2.3.25 or higher)
+
 ## 1.6.0
 
 - Update dependencies (golang 1.24)

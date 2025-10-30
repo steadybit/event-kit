@@ -200,6 +200,10 @@ components:
         reasonDetails:
           type: string
           description: Additional information about the reason for the state.
+        properties:
+          type: object
+          additionalProperties: true
+          description: The properties of the experiment execution
       required:
         - experimentKey
         - executionId

@@ -148,6 +148,9 @@ type ExperimentExecution struct {
 	Name          string     `json:"name"`
 	PreparedTime  time.Time  `json:"preparedTime"`
 
+	// Properties The properties of the experiment execution
+	Properties *map[string]interface{} `json:"properties,omitempty"`
+
 	// Reason Additional information about the reason for the state.
 	Reason *string `json:"reason,omitempty"`
 
