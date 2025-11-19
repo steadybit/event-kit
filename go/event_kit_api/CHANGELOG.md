@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.2
+
+- Update dependencies
+
 ## 1.6.1
 
 - Added `properties` to `ExperimentExecution`-Events (requires platform version 2.3.25 or higher)
