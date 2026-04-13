@@ -1,12 +1,12 @@
 module github.com/steadybit/event-kit/go/event_kit_api
 
-go 1.24
+go 1.24.0
 
 toolchain go1.25.4
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/oapi-codegen/runtime v1.3.1
+	github.com/oapi-codegen/runtime v1.4.0
 )
 
 require github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
