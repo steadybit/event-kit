@@ -158,6 +158,9 @@ type ExperimentExecution struct {
 	ReasonDetails *string                  `json:"reasonDetails,omitempty"`
 	StartedTime   time.Time                `json:"startedTime"`
 	State         ExperimentExecutionState `json:"state"`
+
+	// Tags Tags of the experiment at the time the execution was requested.
+	Tags *[]string `json:"tags,omitempty"`
 }
 
 // ExperimentExecutionState defines model for ExperimentExecution.State.

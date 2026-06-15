@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.3
+
+- Added `tags` to `ExperimentExecution`, exposing the experiment's tags at the time the execution was requested.
+
 ## 1.6.2
 
 - Update dependencies

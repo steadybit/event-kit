@@ -175,6 +175,12 @@ components:
           type: string
         hypothesis:
           type: string
+        tags:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: Tags of the experiment at the time the execution was requested.
         preparedTime:
           type: string
           format: date-time
