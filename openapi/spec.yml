@@ -175,6 +175,11 @@ components:
           type: string
         hypothesis:
           type: string
+        tags:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
         preparedTime:
           type: string
           format: date-time
@@ -200,6 +205,10 @@ components:
         reasonDetails:
           type: string
           description: Additional information about the reason for the state.
+        variables:
+          type: object
+          additionalProperties:
+            type: string
         properties:
           type: object
           additionalProperties: true

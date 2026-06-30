@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.3
+
+- Added `tags` and `variables` to `ExperimentExecution`-Events
+
 ## 1.6.2
 
 - Update dependencies
