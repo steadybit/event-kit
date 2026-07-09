@@ -21,35 +21,35 @@ func markAsUsed(t *testing.T, v any) {
 
 func TestEventListenerRequestBody(t *testing.T) {
 	v := EventRequestBody{
-		Environment: Ptr(Environment{
+		Environment: new(Environment{
 			Id:   "test",
 			Name: "gateway",
 		}),
 		EventName: "experiment.step.started",
 		EventTime: time.Now(),
-		ExperimentExecution: Ptr(ExperimentExecution{
-			EndedTime:     Ptr(time.Now()),
+		ExperimentExecution: new(ExperimentExecution{
+			EndedTime:     new(time.Now()),
 			ExecutionId:   42,
 			ExperimentKey: "ExperimentKey",
-			Reason:        Ptr("Reason"),
-			ReasonDetails: Ptr("ReasonDetails"),
+			Reason:        new("Reason"),
+			ReasonDetails: new("ReasonDetails"),
 			Hypothesis:    "Hypothesis",
 			Name:          "Name",
 			PreparedTime:  time.Time{},
 			StartedTime:   time.Time{},
 			State:         ExperimentExecutionStateCreated,
 		}),
-		ExperimentStepExecution: Ptr(ExperimentStepExecution{
+		ExperimentStepExecution: new(ExperimentStepExecution{
 			ExecutionId:   42,
 			ExperimentKey: "ExperimentKey",
 			Type:          Action,
-			ActionId:      Ptr("action-id"),
+			ActionId:      new("action-id"),
 			Id:            uuid.New(),
-			EndedTime:     Ptr(time.Now()),
-			StartedTime:   Ptr(time.Now()),
+			EndedTime:     new(time.Now()),
+			StartedTime:   new(time.Now()),
 			State:         ExperimentStepExecutionStateCreated,
 		}),
-		ExperimentStepTargetExecution: Ptr(ExperimentStepTargetExecution{
+		ExperimentStepTargetExecution: new(ExperimentStepTargetExecution{
 			ExecutionId:     42,
 			ExperimentKey:   "ExperimentKey",
 			Id:              uuid.New(),
@@ -59,22 +59,22 @@ func TestEventListenerRequestBody(t *testing.T) {
 				"target.name":   {"test-target"},
 				"target.colors": {"red", "green", "blue"},
 			},
-			EndedTime:     Ptr(time.Now()),
-			StartedTime:   Ptr(time.Now()),
+			EndedTime:     new(time.Now()),
+			StartedTime:   new(time.Now()),
 			State:         "state",
 			TargetName:    "test-target",
 			TargetType:    "target-type-test",
-			Reason:        Ptr("Reason"),
-			ReasonDetails: Ptr("ReasonDetails"),
+			Reason:        new("Reason"),
+			ReasonDetails: new("ReasonDetails"),
 		}),
 		Id: uuid.New(),
 		Principal: UserPrincipal{
-			Email:         Ptr("email"),
+			Email:         new("email"),
 			Name:          "Peter",
 			Username:      "Pan",
 			PrincipalType: string(User),
 		},
-		Team: Ptr(Team{
+		Team: new(Team{
 			Id:   "test",
 			Key:  "test",
 			Name: "gateway",
@@ -112,8 +112,9 @@ func TestActionList(t *testing.T) {
 	markAsUsed(t, v)
 }
 
+//go:fix inline
 func Ptr[T any](val T) *T {
-	return &val
+	return new(val)
 }
 
 func TestEventListenerDescription(t *testing.T) {
