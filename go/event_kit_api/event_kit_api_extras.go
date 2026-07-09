@@ -3,4 +3,4 @@
 
 package event_kit_api
 
-type Principal interface{}
+type Principal any
